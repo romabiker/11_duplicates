@@ -1,6 +1,14 @@
 # Anti-Duplicator
 
-[TODO. There will be project description]
+This script finds file duplicates in a given directory and prints result to console
+
+## Code Example
+
+```
+$ python3 duplicates.py <dirpath>
+/media/path/to/file/basename : 17095669
+/media/path2/to/file/basename : 17095669
+```
 
 # Project Goals
 
