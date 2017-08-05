@@ -29,10 +29,9 @@ def find_file_duplicates(dirpath):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        dirpath = sys.argv[1]
-        file_duplicates = find_file_duplicates(dirpath)
-        for fpath, fsize in file_duplicates.items():
-            print("{} : {}".format(fpath, fsize))
-    else:
+    if not len(sys.argv) > 1:
         print('\nEnter: python3 duplicates.py "dirpath"\n')
+    dirpath = sys.argv[1]
+    file_duplicates = find_file_duplicates(dirpath)
+    for fpath, fsize in file_duplicates.items():
+        print("{} : {}".format(fpath, fsize))
