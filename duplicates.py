@@ -1,7 +1,8 @@
 from collections import Counter
+import operator
 import os
 from os.path import (
-            basename,
+            dirname,
             join,
             getsize,
             )
@@ -18,20 +19,33 @@ def find_file_duplicates(dirpath):
         for fname in files:
             fpath = join(root, fname)
             fsize = getsize(fpath)
-            fpathes_sized[fpath] = fsize
+            # (fname, fsize) can't be the key because of possible duplicates
+            fpathes_sized[fpath] = (fname, fsize)
             fsizes.append(fsize)
     size_counter = Counter(fsizes)
     fnames_counter = Counter(fnames)
-    for fpath, fsize in fpathes_sized.items():
-        if fnames_counter[basename(fpath)] > 1 and size_counter[fsize] > 1:
-            file_duplicates[fpath] = fsize
+    for fpath, (fname, fsize) in fpathes_sized.items():
+        if fnames_counter[fname] > 1 and size_counter[fsize] > 1:
+            file_duplicates[fpath] = fname
     return file_duplicates
 
 
 if __name__ == '__main__':
     if not len(sys.argv) > 1:
         print('\nEnter: python3 duplicates.py "dirpath"\n')
+        sys.exit()
     dirpath = sys.argv[1]
+    if not os.path.exists(dirpath):
+        print('\nThis dirpath does not exist\n')
+        sys.exit()
     file_duplicates = find_file_duplicates(dirpath)
-    for fpath, fsize in file_duplicates.items():
-        print("{} : {}".format(fpath, fsize))
+    if not file_duplicates:
+        print('\nThere is no any file duplicates\n')
+    else:
+        print('\nFound next file duplicates in {}:\n'.format(dirpath))
+        for (fpath, fname) in sorted(
+                                file_duplicates.items(),
+                                key=operator.itemgetter(1)
+                                ):
+            print("{} ---> {}".format(fname, dirname(fpath)))
+        print()
