@@ -30,6 +30,16 @@ def find_file_duplicates(dirpath):
     return file_duplicates
 
 
+def output_file_duplicates_to_console(file_duplicates, second_item=1):
+    print('\nFound next file duplicates in {}:\n'.format(dirpath))
+    for (fpath, fname) in sorted(
+                            file_duplicates.items(),
+                            key=operator.itemgetter(second_item)
+                            ):
+        print("{} ---> {}".format(fname, dirname(fpath)))
+    print()
+
+
 if __name__ == '__main__':
     if not len(sys.argv) > 1:
         print('\nEnter: python3 duplicates.py "dirpath"\n')
@@ -41,11 +51,4 @@ if __name__ == '__main__':
     file_duplicates = find_file_duplicates(dirpath)
     if not file_duplicates:
         print('\nThere is no any file duplicates\n')
-    else:
-        print('\nFound next file duplicates in {}:\n'.format(dirpath))
-        for (fpath, fname) in sorted(
-                                file_duplicates.items(),
-                                key=operator.itemgetter(1)
-                                ):
-            print("{} ---> {}".format(fname, dirname(fpath)))
-        print()
+    output_file_duplicates_to_console(file_duplicates)
